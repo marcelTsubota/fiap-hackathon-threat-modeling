@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resultado — Threat Modeling</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🛡️ Resultado da Análise</h1>
+            <a href="/" class="btn btn-secondary">← Nova Análise</a>
+        </header>
+
+        <main>
+            <!-- Summary -->
+            <section class="result-summary">
+                <div class="summary-card">
+                    <h3>Componentes Detectados</h3>
+                    <span class="big-number">{{ detections_count }}</span>
+                </div>
+                <div class="summary-card">
+                    <h3>Ameaças Identificadas</h3>
+                    <span class="big-number threat-count">{{ threats_count }}</span>
+                </div>
+                <div class="summary-card download-card">
+                    <h3>Relatório PDF</h3>
+                    <a href="/download/{{ pdf_filename }}" class="btn btn-primary">📄 Download PDF</a>
+                </div>
+            </section>
+
+            <!-- Detections Table -->
+            <section class="section">
+                <h2>Componentes Detectados</h2>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Componente</th>
+                            <th>Confiança</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for d in detections %}
+                        <tr>
+                            <td><code>{{ d.id }}</code></td>
+                            <td>{{ d.label }}</td>
+                            <td>
+                                <div class="confidence-bar">
+                                    <div class="confidence-fill" style="width: {{ (d.confidence * 100)|int }}%"></div>
+                                    <span>{{ "%.0f"|format(d.confidence * 100) }}%</span>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- Threats Table -->
+            <section class="section">
+                <h2>Ameaças STRIDE</h2>
+                <table class="data-table threats-table">
+                    <thead>
+                        <tr>
+                            <th>Componente</th>
+                            <th>Categoria</th>
+                            <th>Severidade</th>
+                            <th>Título</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for t in threats %}
+                        <tr>
+                            <td>{{ t.component_label }}</td>
+                            <td><span class="stride-badge stride-{{ t.category|lower|replace(' ', '-') }}">{{ t.category }}</span></td>
+                            <td><span class="severity-badge severity-{{ t.severity|lower }}">{{ t.severity }}</span></td>
+                            <td>{{ t.title }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- Threat Details -->
+            <section class="section">
+                <h2>Detalhes das Ameaças</h2>
+                {% for t in threats %}
+                <div class="threat-card">
+                    <div class="threat-header">
+                        <h3>{{ t.title }}</h3>
+                        <div class="threat-badges">
+                            <span class="stride-badge stride-{{ t.category|lower|replace(' ', '-') }}">{{ t.category }}</span>
+                            <span class="severity-badge severity-{{ t.severity|lower }}">{{ t.severity }}</span>
+                        </div>
+                    </div>
+                    <p><strong>Componente:</strong> {{ t.component_label }}</p>
+                    <p><strong>Descrição:</strong> {{ t.description }}</p>
+                    <p><strong>Impacto:</strong> {{ t.impact }}</p>
+                    {% if t.mitigations %}
+                    <div class="mitigations">
+                        <strong>Mitigações:</strong>
+                        <ul>
+                            {% for m in t.mitigations %}
+                            <li>{{ m }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </section>
+        </main>
+
+        <footer>
+            <p>FIAP Software Security — Hackathon 2026</p>
+        </footer>
+    </div>
+</body>
+</html>

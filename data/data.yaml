@@ -1,0 +1,33 @@
+# ============================================================
+# YOLO Dataset Configuration — FIAP Hackathon Threat Modeling
+# ============================================================
+# 14 fixed classes for architectural component detection.
+# DO NOT reorder or rename classes — labels are index-based.
+#
+# Usage:
+#   yolo detect train data=data/data.yaml model=yolov8n.pt ...
+# ============================================================
+
+path: data # dataset root (relative to project working directory)
+train: images/train # training images
+val: images/val # validation images
+
+# Number of classes
+nc: 14
+
+# Class names (index order matters — must match label files)
+names:
+  0: User
+  1: External System
+  2: API Gateway
+  3: Load Balancer
+  4: Web Application
+  5: Mobile Application
+  6: Application Server
+  7: Serverless Function
+  8: Database
+  9: Cache
+  10: Message Queue
+  11: File Storage
+  12: Authentication Service
+  13: Security Service (WAF/Firewall/Shield)

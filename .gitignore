@@ -5,12 +5,13 @@ __pycache__/
 
 # Virtual environment
 .venv/
+.venv-1/
 venv/
 ENV/
 
 # Environment files
 .env
-.env.*
+!.env.example
 
 # Byte-compiled / optimized / DLL files
 *.pyc
@@ -35,9 +36,21 @@ dist/
 .DS_Store
 Thumbs.db
 
-# Data, models, and outputs
-data/
-models/
+# Data — keep config/kb, ignore generated images/labels
+data/images/
+data/labels/
+data/raw_icons/
+!data/data.yaml
+!data/kb.json
+
+# Models — ignore weights (large binary files)
+models/*.pt
+
+# Outputs (generated PDFs)
+outputs/
+
+# Training runs
+runs/
 
 # Static and templates if generated
 staticfiles/

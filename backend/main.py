@@ -5,8 +5,10 @@ from datetime import datetime
 from pathlib import Path
 from typing import cast
 
-from fastapi import FastAPI, File, HTTPException, UploadFile
+from fastapi import FastAPI, File, HTTPException, Request, UploadFile
 from fastapi.responses import FileResponse, HTMLResponse
+from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
 
 from backend.detector import DetectorConfig, YoloDetector
 from backend.report_generator import ReportGenerator
@@ -15,6 +17,10 @@ from backend.settings import settings
 from backend.stride_engine import LLMRequiredError, StrideEngine
 
 app = FastAPI(title="FIAP Threat Modeling MVP")
+
+# Static files and templates
+app.mount("/static", StaticFiles(directory="static"), name="static")
+templates = Jinja2Templates(directory="templates")
 
 OUTPUT_DIR = Path("outputs")
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
@@ -59,22 +65,13 @@ def _get_generator() -> ReportGenerator:
     return cast(ReportGenerator, generator)
 
 
-@app.get("/", response_class=HTMLResponse)
-async def index() -> str:
-    return """
-    <html><head><title>Threat Modeling</title></head>
-    <body>
-      <h1>Upload Architecture Diagram</h1>
-      <form action="/analyze" enctype="multipart/form-data" method="post">
-        <input name="image" type="file" accept="image/*" required>
-        <input type="submit" value="Analyze">
-      </form>
-    </body></html>
-    """
+@app.get("/")
+async def index(request: Request):
+    return templates.TemplateResponse("index.html", {"request": request})
 
 
-@app.post("/analyze", response_class=HTMLResponse)
-async def analyze(image: UploadFile = File(...)) -> HTMLResponse:
+@app.post("/analyze")
+async def analyze(request: Request, image: UploadFile = File(...)):
     # Basic content-type check (content_type can be None)
     if not image.content_type or not image.content_type.startswith("image/"):
         raise HTTPException(status_code=400, detail="Uploaded file must be an image.")
@@ -117,20 +114,35 @@ async def analyze(image: UploadFile = File(...)) -> HTMLResponse:
     detections_count = len(diagram.detections)
     threats_count = len(stride_result.threats)
 
-    # Pydantic v2 serialization
-    report_json = report.model_dump_json()[:1000]
+    # Prepare template data
+    detections_data = [
+        {"id": d.id, "label": d.label.value, "confidence": d.confidence}
+        for d in diagram.detections
+    ]
+    threats_data = [
+        {
+            "component_label": t.component_label.value,
+            "category": t.category.value,
+            "severity": t.severity.value,
+            "title": t.title,
+            "description": t.description,
+            "impact": t.impact,
+            "mitigations": t.mitigations,
+        }
+        for t in stride_result.threats
+    ]
 
-    html = f"""
-    <html><head><title>Analysis Result</title></head><body>
-      <h1>Analysis Complete</h1>
-      <p>Detections: {detections_count}</p>
-      <p>Threats: {threats_count}</p>
-      <p><a href="/download/{filename}">Download PDF</a></p>
-      <h2>Report (partial JSON)</h2>
-      <pre>{report_json}...</pre>
-    </body></html>
-    """
-    return HTMLResponse(content=html)
+    return templates.TemplateResponse(
+        "result.html",
+        {
+            "request": request,
+            "detections_count": detections_count,
+            "threats_count": threats_count,
+            "pdf_filename": filename,
+            "detections": detections_data,
+            "threats": threats_data,
+        },
+    )
 
 
 @app.get("/download/{filename}")

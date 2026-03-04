@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Threat Modeling — FIAP</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🛡️ Threat Modeling com IA</h1>
+            <p class="subtitle">FIAP Software Security — Modelagem de Ameaças Automatizada (STRIDE)</p>
+        </header>
+
+        <main>
+            <section class="upload-section">
+                <h2>Upload do Diagrama de Arquitetura</h2>
+                <p>Envie uma imagem do diagrama de arquitetura do seu sistema. A IA irá detectar os componentes e gerar um relatório STRIDE automaticamente.</p>
+
+                <form id="upload-form" action="/analyze" method="post" enctype="multipart/form-data">
+                    <div class="drop-zone" id="drop-zone">
+                        <div class="drop-zone__prompt">
+                            <span class="drop-zone__icon">📁</span>
+                            <p>Arraste a imagem aqui ou <strong>clique para selecionar</strong></p>
+                            <p class="small">Formatos: PNG, JPG, JPEG (máx. 10 MB)</p>
+                        </div>
+                        <input type="file" name="image" id="file-input" accept="image/*" required class="drop-zone__input">
+                    </div>
+                    <div id="file-preview" class="file-preview" style="display: none;">
+                        <img id="preview-img" alt="Preview">
+                        <p id="file-name"></p>
+                    </div>
+                    <button type="submit" id="submit-btn" class="btn btn-primary" disabled>
+                        <span class="btn-text">Analisar Diagrama</span>
+                        <span class="btn-loading" style="display: none;">⏳ Analisando...</span>
+                    </button>
+                </form>
+            </section>
+
+            <section class="info-section">
+                <h2>Como Funciona</h2>
+                <div class="pipeline-steps">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <h3>Upload</h3>
+                        <p>Envie a imagem do diagrama de arquitetura</p>
+                    </div>
+                    <div class="step-arrow">→</div>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <h3>Detecção (YOLO)</h3>
+                        <p>IA identifica os componentes no diagrama</p>
+                    </div>
+                    <div class="step-arrow">→</div>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <h3>STRIDE (LLM)</h3>
+                        <p>Gera ameaças para cada componente detectado</p>
+                    </div>
+                    <div class="step-arrow">→</div>
+                    <div class="step">
+                        <div class="step-number">4</div>
+                        <h3>Relatório PDF</h3>
+                        <p>Download do relatório completo de ameaças</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="classes-section">
+                <h2>Componentes Detectáveis (14 classes)</h2>
+                <div class="class-grid">
+                    <span class="class-tag">User</span>
+                    <span class="class-tag">External System</span>
+                    <span class="class-tag">API Gateway</span>
+                    <span class="class-tag">Load Balancer</span>
+                    <span class="class-tag">Web Application</span>
+                    <span class="class-tag">Mobile Application</span>
+                    <span class="class-tag">Application Server</span>
+                    <span class="class-tag">Serverless Function</span>
+                    <span class="class-tag">Database</span>
+                    <span class="class-tag">Cache</span>
+                    <span class="class-tag">Message Queue</span>
+                    <span class="class-tag">File Storage</span>
+                    <span class="class-tag">Authentication Service</span>
+                    <span class="class-tag">Security Service</span>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <p>FIAP Software Security — Hackathon 2026</p>
+        </footer>
+    </div>
+
+    <script src="/static/app.js"></script>
+</body>
+</html>

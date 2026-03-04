@@ -1,0 +1,364 @@
+{
+  "items": [
+    {
+      "id": "stride_user_spoofing",
+      "component": "User",
+      "category": "Spoofing",
+      "text": "User spoofing: An attacker impersonates a legitimate user by stealing credentials (phishing, credential stuffing, session hijacking). Mitigations include multi-factor authentication (MFA), strong password policies, session token rotation, and anomaly-based login detection."
+    },
+    {
+      "id": "stride_user_repudiation",
+      "component": "User",
+      "category": "Repudiation",
+      "text": "User repudiation: A user denies performing a critical action (e.g., financial transaction, data deletion). Mitigations include immutable audit logs, digital signatures on high-value actions, and tamper-evident logging with centralized SIEM integration."
+    },
+    {
+      "id": "stride_user_info_disclosure",
+      "component": "User",
+      "category": "Information Disclosure",
+      "text": "User information disclosure: Sensitive user data (PII, credentials, tokens) is leaked through insecure client-side storage, browser cache, or network interception. Mitigations include TLS everywhere, secure cookie flags (HttpOnly, Secure, SameSite), and avoiding storing sensitive data in localStorage."
+    },
+    {
+      "id": "stride_external_system_spoofing",
+      "component": "External System",
+      "category": "Spoofing",
+      "text": "External system spoofing: A malicious actor impersonates a trusted third-party API or service. Mitigations include mutual TLS (mTLS), certificate pinning, strict allow-listing of partner IPs/domains, and HMAC-signed payloads."
+    },
+    {
+      "id": "stride_external_system_tampering",
+      "component": "External System",
+      "category": "Tampering",
+      "text": "External system tampering: Data exchanged with an external system is modified in transit or at rest. Mitigations include payload signing (HMAC/JWT), integrity verification hashes, and end-to-end encryption of API payloads."
+    },
+    {
+      "id": "stride_external_system_info_disclosure",
+      "component": "External System",
+      "category": "Information Disclosure",
+      "text": "External system information disclosure: Sensitive data is exposed when communicating with third-party systems via unencrypted channels or overly permissive API responses. Mitigations include TLS 1.2+, data minimization in API responses, and redacting sensitive fields in logs."
+    },
+    {
+      "id": "stride_external_system_dos",
+      "component": "External System",
+      "category": "Denial of Service",
+      "text": "External system DoS: An external dependency becomes unavailable, cascading failures into the system. Mitigations include circuit breaker patterns, retry with exponential backoff, fallback mechanisms, and SLA monitoring with alerting."
+    },
+    {
+      "id": "stride_api_gateway_spoofing",
+      "component": "API Gateway",
+      "category": "Spoofing",
+      "text": "API Gateway spoofing: An attacker bypasses or impersonates the API gateway to access backend services directly. Mitigations include network segmentation (backend services only accept traffic from gateway), JWT/OAuth2 validation at the gateway, and API key rotation."
+    },
+    {
+      "id": "stride_api_gateway_tampering",
+      "component": "API Gateway",
+      "category": "Tampering",
+      "text": "API Gateway tampering: Request or response payloads are modified at the gateway layer. Mitigations include input validation and schema enforcement at the gateway, request signing, and immutable gateway configuration via IaC."
+    },
+    {
+      "id": "stride_api_gateway_repudiation",
+      "component": "API Gateway",
+      "category": "Repudiation",
+      "text": "API Gateway repudiation: API calls cannot be traced back to their origin. Mitigations include comprehensive access logging with correlation IDs, centralized log aggregation, and non-repudiation headers (e.g., X-Request-ID)."
+    },
+    {
+      "id": "stride_api_gateway_info_disclosure",
+      "component": "API Gateway",
+      "category": "Information Disclosure",
+      "text": "API Gateway information disclosure: The gateway leaks internal architecture details, stack traces, or sensitive headers. Mitigations include stripping internal headers, custom error pages without stack traces, and disabling verbose error modes in production."
+    },
+    {
+      "id": "stride_api_gateway_dos",
+      "component": "API Gateway",
+      "category": "Denial of Service",
+      "text": "API Gateway DoS: The gateway is overwhelmed by volumetric or application-layer attacks. Mitigations include rate limiting, throttling, IP-based blocking, WAF integration, and auto-scaling the gateway layer."
+    },
+    {
+      "id": "stride_api_gateway_eop",
+      "component": "API Gateway",
+      "category": "Elevation of Privilege",
+      "text": "API Gateway elevation of privilege: An attacker exploits misconfigured routes or weak authorization to access admin or privileged endpoints. Mitigations include role-based access control (RBAC) enforcement at the gateway, least-privilege route policies, and regular security audits of gateway configuration."
+    },
+    {
+      "id": "stride_load_balancer_tampering",
+      "component": "Load Balancer",
+      "category": "Tampering",
+      "text": "Load Balancer tampering: Traffic is redirected to malicious backends or altered in transit. Mitigations include TLS termination with strong ciphers, backend health checks with integrity verification, and immutable LB configuration via infrastructure-as-code."
+    },
+    {
+      "id": "stride_load_balancer_info_disclosure",
+      "component": "Load Balancer",
+      "category": "Information Disclosure",
+      "text": "Load Balancer information disclosure: The LB exposes internal IP addresses, server versions, or routing information. Mitigations include stripping server headers (Server, X-Powered-By), using generic error pages, and restricting management interface access."
+    },
+    {
+      "id": "stride_load_balancer_dos",
+      "component": "Load Balancer",
+      "category": "Denial of Service",
+      "text": "Load Balancer DoS: The load balancer becomes a single point of failure under DDoS attacks. Mitigations include geo-distributed LBs, DDoS protection services (e.g., AWS Shield, Cloudflare), connection limits, and SYN flood protection."
+    },
+    {
+      "id": "stride_webapp_spoofing",
+      "component": "Web Application",
+      "category": "Spoofing",
+      "text": "Web Application spoofing: Attackers create phishing replicas or exploit session management flaws. Mitigations include HTTPS with HSTS, Content Security Policy (CSP), anti-phishing training, and secure session management with short-lived tokens."
+    },
+    {
+      "id": "stride_webapp_tampering",
+      "component": "Web Application",
+      "category": "Tampering",
+      "text": "Web Application tampering: Client-side code or data is modified (XSS, DOM manipulation, parameter tampering). Mitigations include input validation and output encoding, CSP headers, Subresource Integrity (SRI), and server-side validation of all inputs."
+    },
+    {
+      "id": "stride_webapp_repudiation",
+      "component": "Web Application",
+      "category": "Repudiation",
+      "text": "Web Application repudiation: Users deny actions performed in the web app. Mitigations include server-side audit trails, action confirmation workflows (e.g., email confirmation), and tamper-evident logging."
+    },
+    {
+      "id": "stride_webapp_info_disclosure",
+      "component": "Web Application",
+      "category": "Information Disclosure",
+      "text": "Web Application information disclosure: Sensitive data leaks through error messages, source maps, insecure storage, or verbose APIs. Mitigations include disabling debug mode in production, removing source maps, using secure headers (X-Content-Type-Options, X-Frame-Options), and data masking."
+    },
+    {
+      "id": "stride_webapp_dos",
+      "component": "Web Application",
+      "category": "Denial of Service",
+      "text": "Web Application DoS: Application-layer attacks exhaust server resources (slow loris, regex DoS, large payloads). Mitigations include request size limits, timeout configurations, rate limiting per user/IP, and input complexity validation."
+    },
+    {
+      "id": "stride_webapp_eop",
+      "component": "Web Application",
+      "category": "Elevation of Privilege",
+      "text": "Web Application elevation of privilege: Attacker escalates from regular user to admin via IDOR, broken access control, or JWT manipulation. Mitigations include server-side authorization checks on every request, RBAC, signed/encrypted JWT tokens, and automated access control testing."
+    },
+    {
+      "id": "stride_mobile_spoofing",
+      "component": "Mobile Application",
+      "category": "Spoofing",
+      "text": "Mobile Application spoofing: Fake or repackaged apps impersonate the legitimate app. Mitigations include app signing verification, certificate pinning, runtime integrity checks (SafetyNet/App Attest), and distribution only through official stores."
+    },
+    {
+      "id": "stride_mobile_tampering",
+      "component": "Mobile Application",
+      "category": "Tampering",
+      "text": "Mobile Application tampering: The app binary is reverse-engineered, patched, or instrumented (Frida, Magisk). Mitigations include code obfuscation, root/jailbreak detection, tamper detection libraries, and server-side validation of all business logic."
+    },
+    {
+      "id": "stride_mobile_info_disclosure",
+      "component": "Mobile Application",
+      "category": "Information Disclosure",
+      "text": "Mobile Application information disclosure: Sensitive data is stored insecurely on the device (SharedPreferences, plist, SQLite) or leaked through logs. Mitigations include using secure storage (Keychain/Keystore), disabling logging in release builds, and encrypting local databases."
+    },
+    {
+      "id": "stride_mobile_eop",
+      "component": "Mobile Application",
+      "category": "Elevation of Privilege",
+      "text": "Mobile Application elevation of privilege: Attacker exploits deep links, intent hijacking, or insecure IPC to access privileged functionality. Mitigations include validating deep link parameters, restricting exported components, and using app-level authentication for sensitive operations."
+    },
+    {
+      "id": "stride_appserver_tampering",
+      "component": "Application Server",
+      "category": "Tampering",
+      "text": "Application Server tampering: Configuration files, dependencies, or runtime are modified maliciously. Mitigations include immutable deployments, file integrity monitoring (FIM), signed artifacts, and least-privilege OS permissions."
+    },
+    {
+      "id": "stride_appserver_repudiation",
+      "component": "Application Server",
+      "category": "Repudiation",
+      "text": "Application Server repudiation: Server-side actions cannot be attributed to specific requests or users. Mitigations include structured logging with user context, correlation IDs across microservices, and centralized log management with retention policies."
+    },
+    {
+      "id": "stride_appserver_info_disclosure",
+      "component": "Application Server",
+      "category": "Information Disclosure",
+      "text": "Application Server information disclosure: Stack traces, environment variables, or internal configurations are exposed. Mitigations include custom error handlers, environment variable encryption, secrets management (Vault/KMS), and removing default pages."
+    },
+    {
+      "id": "stride_appserver_dos",
+      "component": "Application Server",
+      "category": "Denial of Service",
+      "text": "Application Server DoS: Resource exhaustion through thread pool starvation, memory leaks, or CPU-intensive operations. Mitigations include resource limits (cgroups/containers), health checks, auto-scaling, and async processing for heavy workloads."
+    },
+    {
+      "id": "stride_appserver_eop",
+      "component": "Application Server",
+      "category": "Elevation of Privilege",
+      "text": "Application Server elevation of privilege: Attacker exploits deserialization flaws, SSRF, or misconfigured services to gain higher-level access. Mitigations include input deserialization safeguards, SSRF prevention (URL allowlisting), running services as non-root, and regular dependency scanning."
+    },
+    {
+      "id": "stride_serverless_tampering",
+      "component": "Serverless Function",
+      "category": "Tampering",
+      "text": "Serverless Function tampering: Function code or configuration is altered through compromised CI/CD or IAM misconfigurations. Mitigations include least-privilege IAM roles, signed deployments, immutable function versions, and pipeline security scanning."
+    },
+    {
+      "id": "stride_serverless_info_disclosure",
+      "component": "Serverless Function",
+      "category": "Information Disclosure",
+      "text": "Serverless Function information disclosure: Environment variables containing secrets are logged or exposed. Mitigations include using secrets managers (AWS Secrets Manager, Azure Key Vault), not logging environment variables, and encrypting function environment at rest."
+    },
+    {
+      "id": "stride_serverless_dos",
+      "component": "Serverless Function",
+      "category": "Denial of Service",
+      "text": "Serverless Function DoS: Uncontrolled invocations lead to cost explosion or throttling. Mitigations include concurrency limits, reserved capacity, budget alerts, and input validation to prevent recursive triggers."
+    },
+    {
+      "id": "stride_serverless_eop",
+      "component": "Serverless Function",
+      "category": "Elevation of Privilege",
+      "text": "Serverless Function elevation of privilege: Overly permissive IAM roles allow functions to access unauthorized resources. Mitigations include least-privilege IAM policies scoped to specific resources, regular IAM audits, and automated policy analysis tools."
+    },
+    {
+      "id": "stride_database_tampering",
+      "component": "Database",
+      "category": "Tampering",
+      "text": "Database tampering: SQL injection, NoSQL injection, or unauthorized direct access modifies data. Mitigations include parameterized queries/ORM, network segmentation (no public DB access), and database activity monitoring (DAM)."
+    },
+    {
+      "id": "stride_database_repudiation",
+      "component": "Database",
+      "category": "Repudiation",
+      "text": "Database repudiation: Data changes cannot be attributed to specific users or services. Mitigations include database audit logging (e.g., pgaudit, MySQL audit plugin), change data capture (CDC), and application-level audit trails."
+    },
+    {
+      "id": "stride_database_info_disclosure",
+      "component": "Database",
+      "category": "Information Disclosure",
+      "text": "Database information disclosure: Sensitive data is exposed through unencrypted storage, backup leaks, or excessive query results. Mitigations include encryption at rest (TDE) and in transit (TLS), column-level encryption for PII, data masking, and backup encryption."
+    },
+    {
+      "id": "stride_database_dos",
+      "component": "Database",
+      "category": "Denial of Service",
+      "text": "Database DoS: Resource exhaustion through expensive queries, connection flooding, or lock contention. Mitigations include query timeouts, connection pooling with limits, read replicas, and query performance monitoring."
+    },
+    {
+      "id": "stride_database_eop",
+      "component": "Database",
+      "category": "Elevation of Privilege",
+      "text": "Database elevation of privilege: Attacker gains DBA-level access through privilege escalation or credential theft. Mitigations include least-privilege database users, separate credentials per service, credential rotation, and disabling default admin accounts."
+    },
+    {
+      "id": "stride_cache_tampering",
+      "component": "Cache",
+      "category": "Tampering",
+      "text": "Cache tampering: Cache poisoning injects malicious data that is served to users. Mitigations include validating data before caching, signed cache entries, cache isolation per tenant, and short TTLs for sensitive data."
+    },
+    {
+      "id": "stride_cache_info_disclosure",
+      "component": "Cache",
+      "category": "Information Disclosure",
+      "text": "Cache information disclosure: Sensitive data stored in cache (Redis, Memcached) is accessed without authentication. Mitigations include enabling AUTH on cache instances, network isolation (private subnet), TLS for cache connections, and avoiding caching sensitive PII."
+    },
+    {
+      "id": "stride_cache_dos",
+      "component": "Cache",
+      "category": "Denial of Service",
+      "text": "Cache DoS: Cache stampede or memory exhaustion causes cascading failures. Mitigations include cache warming strategies, circuit breakers, memory limits with eviction policies (LRU), and monitoring cache hit/miss ratios."
+    },
+    {
+      "id": "stride_mq_tampering",
+      "component": "Message Queue",
+      "category": "Tampering",
+      "text": "Message Queue tampering: Messages are modified in transit or replayed. Mitigations include message signing (HMAC), idempotency keys, message encryption, and consumer-side validation of message integrity."
+    },
+    {
+      "id": "stride_mq_repudiation",
+      "component": "Message Queue",
+      "category": "Repudiation",
+      "text": "Message Queue repudiation: Message producers or consumers cannot be traced. Mitigations include producer authentication, message metadata with timestamps and source identifiers, dead-letter queue monitoring, and centralized message tracing."
+    },
+    {
+      "id": "stride_mq_info_disclosure",
+      "component": "Message Queue",
+      "category": "Information Disclosure",
+      "text": "Message Queue information disclosure: Sensitive payloads are visible to unauthorized consumers or in logs. Mitigations include topic-level access control, message payload encryption, TLS for broker connections, and log redaction."
+    },
+    {
+      "id": "stride_mq_dos",
+      "component": "Message Queue",
+      "category": "Denial of Service",
+      "text": "Message Queue DoS: Queue overload or poison messages block processing. Mitigations include message size limits, dead-letter queues with alerting, consumer auto-scaling, and backpressure mechanisms."
+    },
+    {
+      "id": "stride_filestorage_tampering",
+      "component": "File Storage",
+      "category": "Tampering",
+      "text": "File Storage tampering: Files are overwritten, corrupted, or replaced with malicious content. Mitigations include versioning (S3 versioning), write-once policies (WORM), integrity checksums (MD5/SHA256), and access logging."
+    },
+    {
+      "id": "stride_filestorage_repudiation",
+      "component": "File Storage",
+      "category": "Repudiation",
+      "text": "File Storage repudiation: File uploads or deletions cannot be attributed. Mitigations include access logging with user identity, pre-signed URL tracking, and immutable audit trails for file operations."
+    },
+    {
+      "id": "stride_filestorage_info_disclosure",
+      "component": "File Storage",
+      "category": "Information Disclosure",
+      "text": "File Storage information disclosure: Public bucket misconfiguration exposes sensitive files. Mitigations include block public access policies, bucket-level encryption, pre-signed URLs with short TTL, and regular bucket policy audits."
+    },
+    {
+      "id": "stride_auth_spoofing",
+      "component": "Authentication Service",
+      "category": "Spoofing",
+      "text": "Authentication Service spoofing: Attacker exploits weak authentication mechanisms (brute force, credential stuffing, token forgery). Mitigations include MFA enforcement, account lockout policies, CAPTCHA, and token signing with asymmetric keys (RS256)."
+    },
+    {
+      "id": "stride_auth_tampering",
+      "component": "Authentication Service",
+      "category": "Tampering",
+      "text": "Authentication Service tampering: Authentication tokens or sessions are manipulated. Mitigations include signed JWT with strong secrets, token binding, short expiration times, and server-side session validation."
+    },
+    {
+      "id": "stride_auth_repudiation",
+      "component": "Authentication Service",
+      "category": "Repudiation",
+      "text": "Authentication Service repudiation: Login/logout events are not tracked. Mitigations include comprehensive authentication event logging, login history for users, and SIEM integration for auth anomaly detection."
+    },
+    {
+      "id": "stride_auth_info_disclosure",
+      "component": "Authentication Service",
+      "category": "Information Disclosure",
+      "text": "Authentication Service information disclosure: Error messages reveal valid usernames or internal auth logic (user enumeration). Mitigations include generic error messages ('Invalid credentials'), rate limiting login attempts, and not exposing user existence in password reset flows."
+    },
+    {
+      "id": "stride_auth_dos",
+      "component": "Authentication Service",
+      "category": "Denial of Service",
+      "text": "Authentication Service DoS: Brute force or credential stuffing overwhelms the auth service. Mitigations include rate limiting, progressive delays, CAPTCHA after failed attempts, and distributed auth service with auto-scaling."
+    },
+    {
+      "id": "stride_auth_eop",
+      "component": "Authentication Service",
+      "category": "Elevation of Privilege",
+      "text": "Authentication Service elevation of privilege: Attacker escalates from unauthenticated to admin by exploiting token validation flaws or role assignment bugs. Mitigations include strict role validation on every request, admin role assignment requiring approval workflows, and regular access reviews."
+    },
+    {
+      "id": "stride_security_tampering",
+      "component": "Security Service (WAF/Firewall/Shield)",
+      "category": "Tampering",
+      "text": "Security Service tampering: WAF/firewall rules are modified to allow malicious traffic. Mitigations include rule versioning and change management, IaC for security configurations, and dual-approval for rule changes."
+    },
+    {
+      "id": "stride_security_info_disclosure",
+      "component": "Security Service (WAF/Firewall/Shield)",
+      "category": "Information Disclosure",
+      "text": "Security Service information disclosure: WAF logs or security alerts expose sensitive request data. Mitigations include log redaction of sensitive fields, encrypted log storage, and restricted access to security dashboards."
+    },
+    {
+      "id": "stride_security_dos",
+      "component": "Security Service (WAF/Firewall/Shield)",
+      "category": "Denial of Service",
+      "text": "Security Service DoS: The security appliance itself becomes a bottleneck under attack. Mitigations include auto-scaling WAF capacity, layered DDoS protection (network + application layer), and failover to secondary security providers."
+    },
+    {
+      "id": "stride_security_eop",
+      "component": "Security Service (WAF/Firewall/Shield)",
+      "category": "Elevation of Privilege",
+      "text": "Security Service elevation of privilege: Attacker bypasses WAF rules to access protected endpoints or admin panels. Mitigations include regular WAF rule testing (WAF bypass testing), defense in depth (WAF + application-level controls), and WAF rule updates based on threat intelligence feeds."
+    }
+  ]
+}
