@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import uuid
 from datetime import datetime
 from pathlib import Path
 from typing import cast
@@ -121,7 +120,8 @@ async def analyze(request: Request, image: UploadFile = File(...)):
 
     report = ThreatModelingReport(meta=meta, diagram=diagram, stride=stride_result)
 
-    filename = f"report_{uuid.uuid4().hex}.pdf"
+    timestamp = datetime.utcnow().strftime("%Y%m%d_%H%M%S")
+    filename = f"relatorio_stride_{timestamp}.pdf"
     filepath = OUTPUT_DIR / filename
 
     generator = _get_generator()

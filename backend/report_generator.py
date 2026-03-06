@@ -81,10 +81,15 @@ class ReportGenerator:
         elements.append(table)
         elements.append(PageBreak())
 
-        # Ameaças STRIDE (tabela resumo)
+        # Ameaças STRIDE (tabela resumo) — ordenar por severidade
+        _SEV_ORDER = {"Critical": 0, "High": 1, "Medium": 2, "Low": 3}
+        sorted_threats = sorted(
+            report.stride.threats,
+            key=lambda t: _SEV_ORDER.get(t.severity.value, 99),
+        )
         elements.append(Paragraph("Ameaças STRIDE", self.styles["TM_Heading2"]))
         thr_table = [["Componente", "Categoria", "Severidade", "Título", "Conf"]]
-        for t in report.stride.threats:
+        for t in sorted_threats:
             title = t.title if len(t.title) <= 140 else t.title[:137] + "..."
             thr_table.append(
                 [
@@ -110,7 +115,7 @@ class ReportGenerator:
         elements.append(table)
 
         # Threat details
-        for t in report.stride.threats:
+        for t in sorted_threats:
             elements.append(Spacer(1, 12))
             elements.append(Paragraph(t.title, self.styles["TM_Heading2"]))
             elements.append(
