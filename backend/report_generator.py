@@ -61,9 +61,9 @@ class ReportGenerator:
         )
         elements.append(PageBreak())
 
-        # Detections
-        elements.append(Paragraph("Detections", self.styles["TM_Heading2"]))
-        det_table = [["ID", "Label", "Confidence"]]
+        # Detecções
+        elements.append(Paragraph("Detecções", self.styles["TM_Heading2"]))
+        det_table = [["ID", "Componente", "Confiança"]]
         for d in report.diagram.detections:
             det_table.append([d.id, d.label.value, f"{d.confidence:.2f}"])
 
@@ -81,9 +81,9 @@ class ReportGenerator:
         elements.append(table)
         elements.append(PageBreak())
 
-        # STRIDE Threats (summary table)
-        elements.append(Paragraph("STRIDE Threats", self.styles["TM_Heading2"]))
-        thr_table = [["Component", "Category", "Severity", "Title", "Conf"]]
+        # Ameaças STRIDE (tabela resumo)
+        elements.append(Paragraph("Ameaças STRIDE", self.styles["TM_Heading2"]))
+        thr_table = [["Componente", "Categoria", "Severidade", "Título", "Conf"]]
         for t in report.stride.threats:
             title = t.title if len(t.title) <= 140 else t.title[:137] + "..."
             thr_table.append(
@@ -114,19 +114,19 @@ class ReportGenerator:
             elements.append(Spacer(1, 12))
             elements.append(Paragraph(t.title, self.styles["TM_Heading2"]))
             elements.append(
-                Paragraph(f"Component: {t.component_label.value}", self.styles["TM_Normal"])
+                Paragraph(f"Componente: {t.component_label.value}", self.styles["TM_Normal"])
             )
-            elements.append(Paragraph(f"Category: {t.category.value}", self.styles["TM_Normal"]))
-            elements.append(Paragraph(f"Severity: {t.severity.value}", self.styles["TM_Normal"]))
+            elements.append(Paragraph(f"Categoria: {t.category.value}", self.styles["TM_Normal"]))
+            elements.append(Paragraph(f"Severidade: {t.severity.value}", self.styles["TM_Normal"]))
 
-            elements.append(Paragraph("Description:", self.styles["TM_Normal"]))
+            elements.append(Paragraph("Descrição:", self.styles["TM_Normal"]))
             elements.append(Paragraph(t.description, self.styles["TM_Normal"]))
 
-            elements.append(Paragraph("Impact:", self.styles["TM_Normal"]))
+            elements.append(Paragraph("Impacto:", self.styles["TM_Normal"]))
             elements.append(Paragraph(t.impact, self.styles["TM_Normal"]))
 
             if t.mitigations:
-                elements.append(Paragraph("Mitigations:", self.styles["TM_Normal"]))
+                elements.append(Paragraph("Mitigações:", self.styles["TM_Normal"]))
                 items = []
                 for m in t.mitigations:
                     txt = m if len(m) <= 160 else m[:157] + "..."
@@ -135,9 +135,9 @@ class ReportGenerator:
 
         elements.append(PageBreak())
 
-        # Enrichment (RAG)
+        # Enriquecimento (RAG)
         if report.enrichment:
-            elements.append(Paragraph("Enrichment (RAG)", self.styles["TM_Heading2"]))
+            elements.append(Paragraph("Enriquecimento (RAG)", self.styles["TM_Heading2"]))
             for e in report.enrichment.enrichments:
                 elements.append(Paragraph(f"Threat ID: {e.threat_id}", self.styles["TM_Normal"]))
                 for hit in e.kb_hits:

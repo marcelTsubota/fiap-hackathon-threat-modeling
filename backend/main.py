@@ -12,7 +12,7 @@ from fastapi.templating import Jinja2Templates
 
 from backend.detector import DetectorConfig, YoloDetector
 from backend.report_generator import ReportGenerator
-from backend.schemas import ReportMeta, ThreatModelingReport
+from backend.schemas import ReportMeta, StrideResult, ThreatModelingReport
 from backend.settings import settings
 from backend.stride_engine import LLMRequiredError, StrideEngine
 
@@ -103,6 +103,22 @@ async def analyze(request: Request, image: UploadFile = File(...)):
         generated_at_iso=datetime.utcnow().isoformat(),
         version="0.1.0",
     )
+
+    # Deduplicate threats: group by (title, category, severity) keeping the first occurrence
+    seen_keys: set[tuple[str, str, str]] = set()
+    unique_threats = []
+    for t in stride_result.threats:
+        key = (t.title.strip().lower(), t.category.value, t.severity.value)
+        if key not in seen_keys:
+            seen_keys.add(key)
+            unique_threats.append(t)
+
+    # Sort by severity descending (Critical > High > Medium > Low)
+    _SEVERITY_ORDER = {"Critical": 0, "High": 1, "Medium": 2, "Low": 3}
+    unique_threats.sort(key=lambda t: _SEVERITY_ORDER.get(t.severity.value, 99))
+
+    stride_result = StrideResult(threats=unique_threats)
+
     report = ThreatModelingReport(meta=meta, diagram=diagram, stride=stride_result)
 
     filename = f"report_{uuid.uuid4().hex}.pdf"

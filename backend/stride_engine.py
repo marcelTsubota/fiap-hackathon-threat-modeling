@@ -357,10 +357,10 @@ class StrideEngine:
                     "component_id": "cmp_...",
                     "component_label": "Database",
                     "category": "Tampering",
-                    "title": "Short threat name",
-                    "description": "What could happen and how (10+ chars).",
-                    "impact": "Business/security impact.",
-                    "mitigations": ["Mitigation 1", "Mitigation 2"],
+                    "title": "Nome curto da ameaça",
+                    "description": "O que pode acontecer e como (10+ caracteres).",
+                    "impact": "Impacto no negócio/segurança.",
+                    "mitigations": ["Mitigação 1", "Mitigação 2"],
                     "severity": "High",
                     "confidence": 0.0,
                 }
@@ -368,26 +368,29 @@ class StrideEngine:
         }
 
         return (
-            "You are a senior application security engineer. "
-            "Generate STRIDE threat modeling results for the detected architecture components.\n\n"
-            "STRICT OUTPUT RULES:\n"
-            "1) Output MUST be valid JSON only (no markdown, no extra text).\n"
-            "2) Output JSON MUST match this top-level shape: {\"threats\": [ ... ]}.\n"
-            "3) Use only the provided components; do not invent components.\n"
-            "4) For each component, produce exactly "
-            f"{self.config.threats_per_component} threats.\n"
-            "5) 'component_label' must be EXACTLY one of the fixed class names provided.\n"
-            "6) 'category' must be EXACTLY one of: "
+            "Você é um engenheiro sênior de segurança de aplicações. "
+            "Gere resultados de modelagem de ameaças STRIDE para os componentes de arquitetura detectados.\n\n"
+            "IMPORTANTE: Todos os campos de texto (title, description, impact, mitigations) "
+            "devem ser escritos em Português do Brasil.\n\n"
+            "REGRAS ESTRITAS DE SAÍDA:\n"
+            "1) A saída DEVE ser apenas JSON válido (sem markdown, sem texto extra).\n"
+            "2) O JSON DEVE ter este formato: {\"threats\": [ ... ]}.\n"
+            "3) Use apenas os componentes fornecidos; não invente componentes.\n"
+            "4) Para cada componente, produza exatamente "
+            f"{self.config.threats_per_component} ameaças.\n"
+            "5) 'component_label' deve ser EXATAMENTE um dos nomes de classe fornecidos.\n"
+            "6) 'category' deve ser EXATAMENTE um de: "
             f"{[c.value for c in StrideCategory]}.\n"
-            "7) 'severity' must be EXACTLY one of: "
+            "7) 'severity' deve ser EXATAMENTE um de: "
             f"{[s.value for s in Severity]}.\n"
-            "8) 'confidence' must be a float 0..1.\n"
-            "9) Mitigations must be actionable and specific.\n\n"
-            "REFERENCE SCHEMA EXAMPLE (do not copy blindly):\n"
+            "8) 'confidence' deve ser um float entre 0 e 1.\n"
+            "9) As mitigações devem ser acionáveis e específicas.\n"
+            "10) Escreva title, description, impact e mitigations em Português do Brasil.\n\n"
+            "EXEMPLO DE SCHEMA DE REFERÊNCIA (não copie literalmente):\n"
             f"{json.dumps(schema_hint, ensure_ascii=False)}\n\n"
-            "DETECTED COMPONENTS:\n"
+            "COMPONENTES DETECTADOS:\n"
             f"{json.dumps(components_payload, ensure_ascii=False)}\n\n"
-            "RAG CONTEXT (grounding snippets; may be empty):\n"
+            "CONTEXTO RAG (trechos de referência; pode estar vazio):\n"
             f"{rag_context}\n"
         )
 
@@ -410,8 +413,9 @@ class StrideEngine:
                     {
                         "role": "system",
                         "content": (
-                            "You are a senior application security engineer. "
-                            "Return ONLY valid JSON. Do not include markdown, code fences, or any extra text."
+                            "Você é um engenheiro sênior de segurança de aplicações. "
+                            "Retorne APENAS JSON válido. Não inclua markdown, blocos de código ou texto adicional. "
+                            "Todos os campos de texto devem estar em Português do Brasil."
                         ),
                     },
                     {"role": "user", "content": prompt},
@@ -543,16 +547,16 @@ class StrideEngine:
             component_id=comp_id,
             component_label=comp_label,
             category=default_category,
-            title=f"Potential {default_category.value} vulnerability",
+            title=f"Potencial vulnerabilidade de {default_category.value}",
             description=(
-                f"Automated threat analysis was incomplete for this {comp_label.value} component. "
-                "Manual security review is strongly recommended."
+                f"A análise automatizada de ameaças foi incompleta para este componente {comp_label.value}. "
+                "Revisão manual de segurança é fortemente recomendada."
             ),
-            impact="Specific impact undetermined; component may expose the system to risk.",
+            impact="Impacto específico indeterminado; o componente pode expor o sistema a riscos.",
             mitigations=[
-                "Perform manual security review of this component",
-                "Apply component-specific security hardening measures",
-                "Enable comprehensive audit logging and monitoring",
+                "Realizar revisão manual de segurança deste componente",
+                "Aplicar medidas de hardening de segurança específicas do componente",
+                "Habilitar auditoria e monitoramento abrangentes",
             ],
             severity=Severity.MEDIUM,
             confidence=0.2,
