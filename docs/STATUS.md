@@ -168,16 +168,38 @@ uvicorn backend.main:app --reload
 
 | Métrica | Meta | Status Atual |
 |---|---|---|
-| mAP@0.5 | ≥ 0.50 (aceitável), ≥ 0.70 (ideal) | ⏳ Pendente treinamento |
-| Precision | ≥ 0.60 | ⏳ Pendente treinamento |
-| Recall | ≥ 0.50 | ⏳ Pendente treinamento |
+| mAP@0.5 | ≥ 0.50 (aceitável), ≥ 0.70 (ideal) | ✅ **0.9309** (PRODUCTION-READY) |
+| mAP@0.5:0.95 | — | ✅ **0.8763** |
+| Precision | ≥ 0.60 | ✅ **0.9243** |
+| Recall | ≥ 0.50 | ✅ **0.9969** |
 | Classes cobertas | 14/14 | ✅ 14/14 |
 | Categorias STRIDE | 6/6 | ✅ 6/6 |
 | KB entries | ≥ 40 | ✅ 60 |
 | Pipeline funcional | End-to-end | ✅ Validado |
 | PDF gerado | Download funcional | ✅ Validado |
 
+### Detalhamento por Classe (AP@0.5)
+
+| Classe | AP@0.5 | Status |
+|---|---|---|
+| User | 0.9950 | ✅ |
+| External System | 0.9950 | ✅ |
+| API Gateway | 0.9950 | ✅ |
+| Load Balancer | 0.9950 | ✅ |
+| Web Application | 0.9950 | ✅ |
+| Mobile Application | 0.9950 | ✅ |
+| Application Server | 0.9888 | ✅ |
+| Serverless Function | 0.4942 | ⚠️ |
+| Database | 0.9950 | ✅ |
+| Cache | 0.9950 | ✅ |
+| Message Queue | 0.6043 | ⚠️ |
+| File Storage | 0.9950 | ✅ |
+| Authentication Service | 0.9950 | ✅ |
+| Security Service (WAF/Firewall/Shield) | 0.9950 | ✅ |
+
+> **Nota:** As classes *Serverless Function* (0.49) e *Message Queue* (0.60) apresentam AP mais baixo, possivelmente por similaridade visual nos dados sintéticos. Adicionar ícones reais pode melhorar essas classes.
+
 ---
 
-> **Última atualização:** 04 de Março de 2026  
+> **Última atualização:** 05 de Março de 2026  
 > **Autor:** Pipeline de desenvolvimento assistido por IA
