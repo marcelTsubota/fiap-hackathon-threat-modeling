@@ -457,7 +457,7 @@ def generate_dataset(
     print(f"  Labels: {labels_dir}")
     print(f"\nClass distribution:")
     for idx, count in sorted(class_counts.items()):
-        print(f"  {idx:2d} {CLASS_NAMES[idx]:45s} → {count:5d} instances")
+        print(f"  {idx:2d} {CLASS_NAMES[idx]:45s} -> {count:5d} instances")
 
     total = sum(class_counts.values())
     print(f"\n  Total instances: {total}")

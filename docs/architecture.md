@@ -15,7 +15,7 @@
   FastAPI            Ultralytics             OpenAI API              ReportLab
   (main.py)         (detector.py)        (stride_engine.py)    (report_generator.py)
                                                 │
-                                          ┌─────┴─────┐
+                                          ┌─────┴──────┐
                                           │   Local KB │
                                           │  (kb.json) │
                                           └────────────┘
@@ -230,23 +230,23 @@ Cross-validation:
                     │    ├── system_name                       │
                     │    └── generated_at_iso                  │
                     │                                          │
-                    │  diagram: DiagramDetections               │
-                    │    ├── image: ImageMeta                   │
-                    │    └── detections: [Detection]            │
-                    │         ├── id, label, confidence         │
+                    │  diagram: DiagramDetections              │
+                    │    ├── image: ImageMeta                  │
+                    │    └── detections: [Detection]           │
+                    │         ├── id, label, confidence        │
                     │         └── bbox: BBox (x1,y1,x2,y2)     │
                     │                                          │
-                    │  stride: StrideResult                     │
-                    │    └── threats: [Threat]                  │
-                    │         ├── threat_id, component_id       │
-                    │         ├── category, severity            │
-                    │         ├── title, description, impact    │
-                    │         └── mitigations: [str]            │
+                    │  stride: StrideResult                    │
+                    │    └── threats: [Threat]                 │
+                    │         ├── threat_id, component_id      │
+                    │         ├── category, severity           │
+                    │         ├── title, description, impact   │
+                    │         └── mitigations: [str]           │
                     │                                          │
-                    │  enrichment: EnrichmentBundle (optional)  │
-                    │    └── enrichments: [EnrichmentResult]    │
-                    │         ├── threat_id                     │
-                    │         ├── kb_hits: [KBHit]              │
-                    │         └── notes                         │
+                    │  enrichment: EnrichmentBundle (optional) │
+                    │    └── enrichments: [EnrichmentResult]   │
+                    │         ├── threat_id                    │
+                    │         ├── kb_hits: [KBHit]             │
+                    │         └── notes                        │
                     └──────────────────────────────────────────┘
 ```

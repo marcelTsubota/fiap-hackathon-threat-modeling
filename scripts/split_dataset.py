@@ -86,8 +86,8 @@ def split_dataset(
     vi, vl = _copy_files(val_files, "val")
 
     print(f"\nDone!")
-    print(f"  Train: {ti} images, {tl} labels → {root / 'images' / 'train'}")
-    print(f"  Val:   {vi} images, {vl} labels → {root / 'images' / 'val'}")
+    print(f"  Train: {ti} images, {tl} labels -> {root / 'images' / 'train'}")
+    print(f"  Val:   {vi} images, {vl} labels -> {root / 'images' / 'val'}")
 
 
 def main() -> None:

@@ -66,14 +66,14 @@ O sistema é um **MVP (Minimum Viable Product)** que automatiza a **modelagem de
 
 ```
                           ┌─────────────────────────┐
-                          │    Interface Web (UI)    │
-                          │    templates/ + static/  │
+                          │    Interface Web (UI)   │
+                          │    templates/ + static/ │
                           └───────────┬─────────────┘
                                       │ POST /analyze (multipart)
                                       ▼
                           ┌─────────────────────────┐
-                          │    FastAPI (main.py)     │
-                          │    Orquestrador          │
+                          │    FastAPI (main.py)    │
+                          │    Orquestrador         │
                           └──┬──────────┬──────────┬┘
                              │          │          │
                     ┌────────▼──┐  ┌────▼────┐  ┌──▼─────────────┐
@@ -81,8 +81,8 @@ O sistema é um **MVP (Minimum Viable Product)** que automatiza a **modelagem de
                     │ .py       │  │ _engine │  │ _generator.py  │
                     │           │  │ .py     │  │                │
                     │ YOLOv8n   │  │ LLM+RAG │  │ ReportLab PDF  │
-                    └────────┬──┘  └────┬────┘  └──┬─────────────┘
-                             │          │          │
+                    └────────┬──┘  └────┬────┘  └─┬──────────────┘
+                             │          │         │
                     ┌────────▼──┐  ┌────▼────┐    │
                     │ models/   │  │ OpenAI  │    │
                     │ best.pt   │  │ API     │    │
