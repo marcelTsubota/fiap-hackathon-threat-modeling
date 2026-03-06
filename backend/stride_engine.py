@@ -305,9 +305,26 @@ class StrideEngine:
         prompt = self._build_prompt(diagram=diagram, rag_context=rag_context)
         raw, usage = self._call_llm_json(prompt)
 
-        threats = self._parse_llm_output(raw, diagram)
-        # Attach basic usage telemetry into Threat.confidence only; detailed usage can be used later in report bundle.
-        # Here, keep schema pure and deterministic.
+        threats, missing = self._parse_llm_output(raw, diagram)
+
+        if missing:
+            # Targeted retry: send only the components that got 0 threats.
+            missing_set = set(missing)
+            missing_detections = [d for d in diagram.detections if d.id in missing_set]
+            missing_diagram = DiagramDetections(
+                image=diagram.image,
+                detections=missing_detections,
+            )
+            retry_prompt = self._build_prompt(diagram=missing_diagram, rag_context=rag_context)
+            retry_raw, _ = self._call_llm_json(retry_prompt)
+            retry_threats, still_missing = self._parse_llm_output(retry_raw, missing_diagram)
+            threats.extend(retry_threats)
+
+            # Fallback for components still missing after retry.
+            det_map = {d.id: d.label for d in diagram.detections}
+            for comp_id in still_missing:
+                threats.append(self._make_fallback_threat(comp_id, det_map[comp_id]))
+
         _ = usage  # retained for future enrichment bundle; not stored in StrideResult per current schema.
 
         return StrideResult(threats=threats)
@@ -444,9 +461,13 @@ class StrideEngine:
     # Parsing + validation
     # -------------------------
 
-    def _parse_llm_output(self, data: Dict[str, Any], diagram: DiagramDetections) -> List[Threat]:
+    def _parse_llm_output(
+        self, data: Dict[str, Any], diagram: DiagramDetections
+    ) -> Tuple[List[Threat], List[str]]:
         """
         Validate JSON structure and convert to Threat objects.
+        Returns (threats, missing_component_ids) where missing_component_ids lists
+        any component IDs for which the LLM produced 0 threats.
         Threat IDs are generated here to be stable inside this run.
         """
         if not isinstance(data, dict) or "threats" not in data:
@@ -497,30 +518,45 @@ class StrideEngine:
             )
             out.append(threat)
 
-        # Enforce exactly N threats per component.
-        # If the LLM returns more than expected, keep the top-N by severity.
-        # If fewer, accept what we got (better partial results than a crash).
-        expected = self.config.threats_per_component
-        _SEV_RANK = {"Critical": 4, "High": 3, "Medium": 2, "Low": 1}
-
-        grouped: Dict[str, List[Threat]] = {}
+        # Identify any components for which the LLM returned 0 threats.
+        counts: Dict[str, int] = {}
         for t in out:
-            grouped.setdefault(t.component_id, []).append(t)
+            counts[t.component_id] = counts.get(t.component_id, 0) + 1
 
-        trimmed: List[Threat] = []
-        for comp_id, threats in grouped.items():
-            if len(threats) > expected:
-                threats.sort(
-                    key=lambda x: _SEV_RANK.get(x.severity.value, 0), reverse=True
-                )
-                threats = threats[:expected]
-            trimmed.extend(threats)
+        missing = [comp_id for comp_id in det_map.keys() if counts.get(comp_id, 0) < 1]
 
-        return trimmed
+        return out, missing
 
     @staticmethod
     def _make_threat_id() -> str:
         return f"thr_{uuid.uuid4().hex[:12]}"
+
+    def _make_fallback_threat(self, comp_id: str, comp_label: ComponentClass) -> Threat:
+        """
+        Generate a minimal fallback threat when the LLM cannot produce one for a component.
+        Used only after a targeted retry still returns 0 threats.
+        """
+        categories = _COMPONENT_TO_STRIDE.get(comp_label, list(StrideCategory))
+        default_category = categories[0] if categories else StrideCategory.INFORMATION_DISCLOSURE
+        return Threat(
+            threat_id=self._make_threat_id(),
+            component_id=comp_id,
+            component_label=comp_label,
+            category=default_category,
+            title=f"Potential {default_category.value} vulnerability",
+            description=(
+                f"Automated threat analysis was incomplete for this {comp_label.value} component. "
+                "Manual security review is strongly recommended."
+            ),
+            impact="Specific impact undetermined; component may expose the system to risk.",
+            mitigations=[
+                "Perform manual security review of this component",
+                "Apply component-specific security hardening measures",
+                "Enable comprehensive audit logging and monitoring",
+            ],
+            severity=Severity.MEDIUM,
+            confidence=0.2,
+        )
 
     # -------------------------
     # RAG (embeddings + retrieval)

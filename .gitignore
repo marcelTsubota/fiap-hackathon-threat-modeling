@@ -3,9 +3,11 @@ __pycache__/
 *.py[cod]
 *$py.class
 
-# Virtual environment
+# Virtual environment (all variants)
 .venv/
 .venv-1/
+.venv-2/
+.venv*/
 venv/
 ENV/
 
@@ -27,6 +29,12 @@ dist/
 # Logs and databases
 *.log
 *.sqlite3
+
+# YOLO training runs (large binary artifacts; best.pt is kept in models/)
+runs/
+
+# Root-level model weights (duplicate of models/)
+yolov8n.pt
 
 # IDE/editor directories
 .vscode/

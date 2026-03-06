@@ -1,0 +1,12 @@
+path: /mnt/data/realistic_arch_dataset
+train: images
+val: images
+
+names:
+  0: API Gateway
+  1: Database
+  2: Cache
+  3: Message Queue
+  4: User
+  5: Application Server
+  6: Load Balancer

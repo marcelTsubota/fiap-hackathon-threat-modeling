@@ -29,7 +29,7 @@ from ultralytics import YOLO  # type: ignore
 
 
 def train(
-    model_name: str = "yolov8n.pt",
+    model_name: str = "models/yolov8n.pt",
     data_yaml: str = "data/data.yaml",
     epochs: int = 40,
     batch: int = 16,
@@ -149,7 +149,7 @@ Examples:
   python scripts/train_yolo.py --model yolov8s.pt        # use small model
         """,
     )
-    parser.add_argument("--model", type=str, default="yolov8n.pt", help="Base model (default: yolov8n.pt)")
+    parser.add_argument("--model", type=str, default="models/yolov8n.pt", help="Base model (default: models/yolov8n.pt)")
     parser.add_argument("--data", type=str, default="data/data.yaml", help="data.yaml path")
     parser.add_argument("--epochs", type=int, default=40, help="Training epochs (default: 40)")
     parser.add_argument("--batch", type=int, default=16, help="Batch size (default: 16)")
